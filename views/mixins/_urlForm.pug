@@ -1,0 +1,5 @@
+mixin urlForm()
+  form.form-signin(action="/" method="POST")
+    .form-group
+      input(type="hidden" name="_csrf" value="#{csrftoken}")
+      input(type="text" name="url" placeholder="Paste a Link" autocomplete="off").form-control.homesearch

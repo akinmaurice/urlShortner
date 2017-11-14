@@ -1,0 +1,8 @@
+mixin loginForm()
+  form.form-signin( method="POST")
+    .form-group
+      input(type="email" name="email" placeholder="Email Address").form-control
+    .form-group
+      input(type="password" name="password" placeholder="Password").form-control
+    .formgroup
+      button.btn.btn-primary.btn-lg.btn-block(type="submit" name="Login") Login

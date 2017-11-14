@@ -1,0 +1,42 @@
+doctype html
+html(lang="en")
+  head
+    title= `${title} | ${h.siteName}`
+    meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/bootstrap-social.css')
+    link(rel='stylesheet', href='/stylesheets/font-awesome.min.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='/javascripts/jquery/jquery.min.js')
+    script(src='/javascripts/bootstrap.min.js')
+    script(src='/javascripts/bootstrap.bundle.min.js')
+    script(src='/javascripts/popper/popper.min.js')
+  body.text-justify
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.fixed-top
+      .container-fluid
+        a(href="/").navbar-brand= h.siteName
+    .container
+      .row.text-center
+        block messages
+          if locals.flashes
+            .col-lg-12.text-center
+              .flash-messages
+                - const categories = Object.keys(locals.flashes)
+                each category in categories
+                  each message in flashes[category]
+                    br
+                    br
+                    br
+                    .flash(class=`alert alert-${category}` role="alert")
+                      p.flash__text!= message
+                      button.flash__remove(onClick="this.parentElement.remove()") &times;
+
+    block content
+
+
+
+    block footer
+      footer.py-5.footer
+        .container
+          p.m-0.text-center  &copy; akin #{h.moment().format('YYYY')}
+
