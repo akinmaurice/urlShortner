@@ -15,10 +15,9 @@ const passport = require('passport');
 const promisify = require('es6-promisify');
 const flash = require('connect-flash');
 const helpers = require('./helpers');
-const csrf = require('csurf');
 const autoIncrement = require('mongoose-auto-increment');
 const errorHandlers = require('./handlers/errorHandlers');
-//Import all of our models
+//  Import all of our models
 require('./models/Url');
 
 // Connect to our Database and handle an bad connections
@@ -30,16 +29,26 @@ mongoose.connection.on('error', (err) => {
 
 // READY?! Let's go!
 autoIncrement.initialize(mongoose);
-//Import routes
+// Import routes
 const index = require('./routes/index');
 
 const app = express();
+
+// Setup CORS HEADER
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Autorization, Access-Control-Allow-Credentials');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  next();
+});
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-//SETUP HELMET FOR SECURITY
+//  SETUP HELMET FOR SECURITY
 app.use(helmet());
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -57,39 +66,41 @@ app.use(session({
   key: process.env.KEY,
   resave: false,
   saveUninitialized: false,
-  store: new MongoStore({ mongooseConnection: mongoose.connection })
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
 }));
 
 // // Passport JS is what we use to handle our logins
 app.use(passport.initialize());
 app.use(passport.session());
 
-// // The flash middleware let's us use req.flash('error', 'Shit!'), which will then pass that message to the next page the user requests
+// The flash middleware let's us u
+// se req.flash('error', 'Shit!'), which will then pass that
+// message to the next page the user requests
 app.use(flash());
 
-//app.use(csrf());
+// app.use(csrf());
 
-//SECURITY HELMET SET UP
+// SECURITY HELMET SET UP
 app.use(helmet.noCache());
 app.use(helmet.referrerPolicy({ policy: 'same-origin' }));
-//app.use(helmet.contentSecurityPolicy({
-//directives: {
-//defaultSrc: ["'self'"],
-//styleSrc: ["'self'", 'fonts.googleapis.com']
-//}
-//}));
-var ninetyDaysInSeconds = 7776000;
+// app.use(helmet.contentSecurityPolicy({
+// directives: {
+// defaultSrc: ["'self'"],
+// styleSrc: ["'self'", 'fonts.googleapis.com']
+// }
+// }));
+const ninetyDaysInSeconds = 7776000;
 app.use(helmet.hpkp({
   maxAge: ninetyDaysInSeconds,
   sha256s: ['AbCdEf123=', 'ZyXwVu456='],
-  includeSubdomains: true
+  includeSubdomains: true,
 }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 // pass variables to our templates + all requests
 app.use((req, res, next) => {
-  //res.locals.csrftoken = req.csrfToken();
+  // res.locals.csrftoken = req.csrfToken();
   res.locals.h = helpers;
   res.locals.flashes = req.flash();
   res.locals.user = req.user || null;
