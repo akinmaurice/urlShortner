@@ -28,4 +28,10 @@ router.post(
   apiController.shortenUrl,
 );
 
+
+router.get(
+  '/url/get',
+  catchErrors(appController.getAll),
+);
+
 module.exports = router;

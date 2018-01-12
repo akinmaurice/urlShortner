@@ -73,3 +73,11 @@ exports.getUrl = async (req, res) => {
     res.redirect(301, `http://${realUrl}`);
   }
 };
+
+
+exports.getAll = async (req, res) => {
+  console.log('hfhfhf');
+  const posts = await Url.find();
+  res.json(posts);
+};
+
